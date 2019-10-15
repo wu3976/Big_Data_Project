@@ -1,0 +1,2 @@
+model_checkpoint_path: "/Users/wuericchenjie/Python3Projects/THE_Project/models/model1/handwritten2.ckpt"
+all_model_checkpoint_paths: "/Users/wuericchenjie/Python3Projects/THE_Project/models/model1/handwritten2.ckpt"
