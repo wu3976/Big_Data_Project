@@ -34,10 +34,15 @@ def upload ():
         # log the data into cassandra
         file_name = img.filename
         current_time = str(time.strftime('%m/%d/%Y %H:%M:%S', time.localtime(time.time())))
-        cqlsm.insert_data(session, file_name, current_time, result)
+        cqlsm.insert_data(session, KEYSPACE, file_name, current_time, result)
 
         return result
 
+'''@app.route('/delete', methods = ['POST', 'GET'])
+def delete():
+    if request.method == 'POST':
+        notice = cqlsm.deleteKeyspace(session, KEYSPACE)
+        return notice'''
 
 # Use existing model to predict the number in an image
 

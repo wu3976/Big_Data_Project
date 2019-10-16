@@ -21,9 +21,10 @@ def createKeySpace(session, keyspace):
         # session.execute: just like type in the code in cqlsh
         # firstly drop the existing keyspace.
         # In the future, function of checking if keyspace exists would be added
-        session.execute("""DROP KEYSPACE %s""" % keyspace)
-        # create the keyspace, using incoming keyspace aurgument
-        session.execute("""CREATE KEYSPACE %s
+        #session.execute("""DROP KEYSPACE %s""" % keyspace)
+
+        # create the keyspace, using incoming keyspace argument, if such a keyspace does not exist
+        session.execute("""CREATE KEYSPACE IF NOT EXISTS %s
         WITH replication = {'class':'SimpleStrategy', 'replication_factor':'2'}""" % keyspace)
 
         log.info("setting keyspace...")
@@ -48,6 +49,7 @@ def createKeySpace(session, keyspace):
 # insert a row of data into a table in the session.
 
 # session: the session of keyspace in which data would be added.
+# keyspace: the keyspace of where the table locates
 # file_name: one of the data, representing the string file name of uploaded file.
 # Time_of_upload: the other one.
 # Prediction_Result: the third one.
@@ -55,9 +57,13 @@ def createKeySpace(session, keyspace):
 # requires: [session exists and activated, a table with appropriate format is used]
 # and [file_name, upload_time, result are string objects]
 # ensures: the corresponding data are added to the table.
-def insert_data(session, file_name, upload_time, result):
+def insert_data(session, keyspace, file_name, upload_time, result):
+    session.execute("""USE %s""" % (keyspace))
     session.execute("""INSERT INTO table_1 (Filename, Time_of_Upload, Prediction_Result)
                                 VALUES ('%s', '%s', '%s')
                                 """ % (file_name, upload_time, result)
                     )
-
+# have error but is functioning
+'''def deleteKeyspace (session, keyspace):
+    session.execute("""DROP KEYSPACE IF EXISTS %s""" % keyspace)
+    return "keyspace deleted!"'''
